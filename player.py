@@ -24,7 +24,8 @@ class Player(Object):
         else:
             print(f"The {item.name} is not here. You can't pick up what is not there")
 
-    def attack(self, sub_task: "SubTask"):
+    @staticmethod
+    def attack(sub_task: "SubTask"):
         if sub_task.monster.alive:
             sub_task.monster.alive = False
             print(f"You gave a left-right-good-night to the {sub_task.monster.name}")
@@ -45,7 +46,21 @@ class Player(Object):
                   f"Everywhere a {animal_sound[animal]}-{animal_sound[animal]}")
 
     @staticmethod
-    def penance():
+    def math_questions(num_questions:int = 5):
+        print("The Goblins have tricked you into picking up the second treasure, "
+              "your penance is to answer 5 math questions")
+        for _ in range(num_questions):
+            num1 = random.randint(0, 10)
+            num2 = random.randint(0, 10)
+            operation = random.choice(["+", "-", "*"])
+            answer = eval(f"{num1}{operation}{num2}")
+            question = f"{num1}{operation}{num2}=?"
+            user_answer = ""
+            while user_answer != answer:
+                user_answer = int(input(question))
+
+    @staticmethod
+    def christmas():
         print("The Goblins have tricked you into picking up the second treasure, your penance is to sing the Twelve "
               "Days of Christmas")
         print("""

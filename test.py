@@ -1,4 +1,6 @@
 import unittest
+import random
+
 from monster import Monster
 from object import Object
 from cave_adventure import CaveAdventure, SubTask
@@ -39,12 +41,46 @@ class MyTestCase(unittest.TestCase):
             attack_description="Attack the evil goblin and clean all the cob webs",
             monster=Monster("evil goblin Marcel"),
             treasure=Object("golden sword"),
-            second_treasure=None
+            second_treasure=Object("silver box")
         )
 
         game = CaveAdventure(intro_description=intro_description, sub_tasks=[task1])
         game.play()
         self.assertTrue(True)
+
+    def test_three_tasks(self):
+        # one task
+        intro_description = "Our village is being overrun by the goblins of the NorthernCaves. " \
+                            "We need you to defeat them! "
+
+        task1 = SubTask(
+            location_description="Entering the mouth of the cave",
+            attack_description="Attack the evil goblin and clean all the cob webs",
+            monster=Monster("evil goblin Marcel"),
+            treasure=Object("golden sword"),
+            second_treasure=None
+        )
+        task2 = SubTask(
+            location_description="Going deeper into the cave",
+            attack_description="Attack the evil wombat and turn off the water supply",
+            monster=Monster("evil wombat Limpian"),
+            treasure=Object("golden shield"),
+            second_treasure=None
+        )
+        task3 = SubTask(
+            location_description="Reaching the depth of the cave",
+            attack_description="Attack the goblin lord",
+            monster=Monster("hobgoblin lord DivaDon"),
+            treasure=Object("golden helmet"),
+            second_treasure=None
+        )
+        sub_tasks = [task1, task2, task3]
+        random.choice(sub_tasks).second_treasure = Object("silver tray of life")
+
+        game = CaveAdventure(intro_description=intro_description, sub_tasks=sub_tasks)
+        game.play()
+        self.assertTrue(True)
+
 
 if __name__ == '__main__':
     unittest.main()
