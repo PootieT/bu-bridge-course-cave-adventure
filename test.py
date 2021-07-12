@@ -75,7 +75,9 @@ class MyTestCase(unittest.TestCase):
             second_treasure=None
         )
         sub_tasks = [task1, task2, task3]
-        random.choice(sub_tasks).second_treasure = Object("silver tray of life")
+        rand_task = random.choice(sub_tasks)
+        rand_task.second_treasure = Object("silver tray of life")
+        rand_task.treasure.append(rand_task.second_treasure)
 
         game = CaveAdventure(intro_description=intro_description, sub_tasks=sub_tasks)
         game.play()

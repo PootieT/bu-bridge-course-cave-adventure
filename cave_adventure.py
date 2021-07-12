@@ -30,7 +30,7 @@ class SubTask:
     def task_accomplished(self):
         """For a task to be accomplished, the monster must be slayed, and the original treasure has to be taken"""
         return not self.monster.alive \
-               and ( len(self.treasure)==0 or (len(self.treasure)==1 and self.second_treasure is not None) )
+               and ( len(self.treasure)==0 or (len(self.treasure)<=1 and self.second_treasure is not None) )
 
     def play(self, player: Player):
         """main finite state machine logic"""
@@ -59,11 +59,12 @@ class SubTask:
                 break
 
             # updating options
+            if self.task_accomplished() and self.exit_description not in self.options:
+                self.options.append(self.exit_description)
             if len(self.treasure) == 1 and self.second_treasure is not None:
                 self.treasure.append(self.second_treasure)
                 self.options.append(f"Pick up the {self.second_treasure.name}")
-            if self.task_accomplished():
-                self.options.append(self.exit_description)
+
         print(self.exit_description)
 
 
@@ -81,7 +82,10 @@ class CaveAdventure:
     def poem():
         words = []
         for i in range(random.randint(10, 20)):
-            word = input(f"Villager Idiot {i}, what is your special word?")
+            word = input(f"Villager Idiot {i}, what is your special word? "
+                         f"(it cannot repeat one of previously said words!)")
+            while word in words:
+                word = input(f"Villager Idiot {i}, give me special word that is not previously said!")
             words.append(word)
         random.shuffle(words)
 
@@ -112,7 +116,9 @@ class CaveAdventure:
         for task in self.sub_tasks:
             task.play(player)
 
-        print("You have collected all three golden treasures and are ready to move on to your final mission")
+        # TODO can check here if player's inventory contains subtasks treasure
+        print(f"You have collected all {len(self.sub_tasks)} golden treasures "
+              f"and are ready to move on to your final mission")
         response = input("Are you ready for the final mission?")
         cnt = 0
         while not self.is_yes(response):
